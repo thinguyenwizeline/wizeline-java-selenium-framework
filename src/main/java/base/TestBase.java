@@ -15,9 +15,6 @@ import libs.Config;
 public class TestBase {
 
     protected static WebDriver driver;
-    ExtentHtmlReporter htmlReporter;
-    ExtentReports report;
-    ExtentTest test;
     protected Logger log = Logger.getLogger(this.getClass());
 
     /**
@@ -50,13 +47,7 @@ public class TestBase {
 
     @BeforeClass
     public void beforeClass(){
-        htmlReporter = new ExtentHtmlReporter("./test-output/report.html");
-        report = new ExtentReports();
-        report.attachReporter(htmlReporter);
-
-        test = report.createTest("Login","Verify login function");
         log.info("Test base - before class");
-        test.log();
         TestBase.driver.manage().window().maximize();
         TestBase.driver.navigate().to(Config.getConfig("baseUrl"));
     }
