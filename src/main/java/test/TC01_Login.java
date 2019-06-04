@@ -40,7 +40,7 @@ public class TC01_Login extends TestBase{
      */
     @Test(dataProvider="login_data")
     public void LoginAndLogout(String username, String password) throws Exception {
-        _login.login(driver, username, password);
-        _home.logout(driver);
+        _login.login(username, password);
+        _home.logout();
     }
 }

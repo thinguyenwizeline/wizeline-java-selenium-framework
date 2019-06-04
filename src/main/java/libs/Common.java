@@ -8,8 +8,10 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import base.LibBase;
 
 public class Common extends LibBase {
+    WebDriver driver;
 
-    public Common() {
+    public Common(WebDriver driver) {
+        this.driver = driver;
 
     }
 

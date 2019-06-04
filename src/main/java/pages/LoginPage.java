@@ -9,32 +9,22 @@ import org.openqa.selenium.support.PageFactory;
 import libs.Common;
 import libs.Config;
 
-public class LoginPage {
-
-    private Common _common = new Common();
-    private LoginObjects _loginObjects = new LoginObjects();
-    private Logger log = Logger.getLogger(this.getClass());
-
+public class LoginPage extends BasePage{
 
     public LoginPage (WebDriver driver) {
-        PageFactory.initElements(driver, _loginObjects);
+
+        super(driver);
     }
 
-    public void login(WebDriver driver) {
-        _common.setText(driver, _loginObjects.txtUserId, Config.getConfig("username"));
-        _common.setText(driver, _loginObjects.txtPassword, Config.getConfig("password"));
-        _common.clickObject(driver, _loginObjects.btnLogin);
-    }
-
-    public boolean login(WebDriver driver, String username, String password) {
+    public HomePage login(String username, String password) {
         try {
             _common.setText(driver, _loginObjects.txtUserId, username);
             _common.setText(driver, _loginObjects.txtPassword, password);
             _common.clickObject(driver, _loginObjects.btnLogin);
-            return true;
+            return new HomePage(driver);
         } catch (Exception e) {
-            log.error("Failed to login with error: " + e.getMessage());
-            return false;
+            System.out.println("Failed to login with error: " + e.getMessage());
+            return null;
         }
 
     }

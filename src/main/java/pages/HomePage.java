@@ -1,4 +1,5 @@
 package pages;
+import com.sun.xml.internal.rngom.parse.host.Base;
 import objects.HomeObjects;
 
 import org.apache.log4j.Logger;
@@ -9,28 +10,23 @@ import org.testng.Assert;
 import libs.Common;
 import libs.Config;
 
-public class HomePage {
-
-    private Common _common = new Common();
-    private HomeObjects _homeObjects = new HomeObjects();
-    private Logger log = Logger.getLogger(this.getClass());
+public class HomePage extends BasePage {
 
     public HomePage(WebDriver driver) {
-        PageFactory.initElements(driver, _homeObjects);
+        super(driver);
     }
 
     /**
      * Logout from Home page
-     * @param driver
      * @return
      */
-    public boolean logout(WebDriver driver) {
+    public LoginPage logout() {
         try {
             _common.clickObject(driver, _homeObjects.btnLogout);
-            return true;
+            return new LoginPage(driver);
         } catch (Exception e) {
-            log.error("Failed to logout with error: " + e.getMessage());
-            return false;
+            System.out.println("Failed to logout with error: " + e.getMessage());
+            return null;
         }
 
     }
