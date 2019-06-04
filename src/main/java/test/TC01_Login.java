@@ -1,6 +1,6 @@
 package test;
 
-import com.aventstack.extentreports.ExtentTest;
+import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -40,7 +40,10 @@ public class TC01_Login extends TestBase{
      */
     @Test(dataProvider="login_data")
     public void LoginAndLogout(String username, String password) throws Exception {
-        _login.login(username, password);
-        _home.logout();
+        System.out.println("Start testing");
+        HomePage homePage = _login.login(username, password);
+        Assert.assertNotNull(homePage);
+        LoginPage loginPage = _home.logout();
+        Assert.assertNotNull(loginPage);
     }
 }
