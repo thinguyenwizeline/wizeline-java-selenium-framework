@@ -1,85 +1,70 @@
 package libs;
 
+import base.LibBase;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import base.LibBase;
+import java.util.concurrent.TimeUnit;
 
 public class Common extends LibBase {
+    private WebDriver driver;
 
-    public Common() {
-
+    public Common(WebDriver driver) {
+        this.driver = driver;
     }
 
-    /** Launch a browser
-     *
-     */
-    public void NavigateURL(WebDriver driver, String sURL) throws Exception
-    {
-        driver.get(sURL);
+    public static WebElement waitForElementPresent(WebDriver driver, final By by, int timeOutInSeconds) {
 
-        // Maximize the window
-        driver.manage().window().maximize();
+        WebElement element;
 
-    }
+        try {
+            driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS.SECONDS); //nullify implicitlyWait()
 
-    /** Wait for an element visible, return TRUE if after timeout, element is displayed, FALSE if not
-     * @return TRUE/FALSE
-     */
-    public static boolean waitForElementVisible(WebDriver driver, WebElement Element)
-    {
-        WebDriverWait wait = new WebDriverWait(driver, Integer.parseInt(Config.getConfig("ELEMENT_VISIBLE_TIMEOUT")));
-        Element = wait.until(ExpectedConditions.visibilityOf(Element));
-        if(Element.isDisplayed()){
-            return true;
+            WebDriverWait wait = new WebDriverWait(driver, timeOutInSeconds);
+            element = wait.until(ExpectedConditions.presenceOfElementLocated(by));
+
+            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS); //reset implicitlyWait
+            return element; //return the element
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
-        return false;
-    }
-
-    /**
-     * @param driver
-     * @param e: Element want to click
-     */
-    public void clickObject (WebDriver driver, WebElement e){
-        if (waitForElementVisible(driver, e)){
-            e.click();
-        } else {
-            log.error("The object " + e.getTagName() + " is not clicked");
-        }
-
     }
 
     /**
      * Set text
-     * @param driver
-     * @param e
+     * @param by
      * @param sText
      */
-    public void setText (WebDriver driver, WebElement e, String sText) {
-        if (waitForElementVisible(driver, e)){
+    public boolean setText(By by, String sText) {
+        WebElement e = waitForElementPresent(driver, by, 5000);
+        if(e != null){
             e.sendKeys(sText);
-        } else {
-            log.error("Could not set text to the object");
+            return true;
         }
-
+        else {
+            return false;
+        }
     }
 
     /**
-     * get text
-     * @param driver
-     * @param e
+     * Set text
+     * @param by
      */
-
-    public String getText(WebDriver driver, WebElement e) {
-
-        if (waitForElementVisible(driver, e)){
-            return e.getText();
-        } else {
-            log.error("Could not get text of the element");
+    public boolean clickObject(By by) {
+        WebElement e = waitForElementPresent(driver, by, 5000);
+        if(e != null){
+            e.click();
+            return true;
         }
-        return null;
+        else {
+            return false;
+        }
     }
+
 
 }
