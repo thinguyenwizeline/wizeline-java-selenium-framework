@@ -1,5 +1,6 @@
 package base;
 
+import libs.ExtentReportUtils;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -9,10 +10,13 @@ import org.testng.annotations.BeforeClass;
 
 import libs.Config;
 
+
 public class TestBase {
 
     protected static WebDriver driver;
     protected Logger log = Logger.getLogger(this.getClass());
+    protected ExtentReportUtils report = new ExtentReportUtils("/test-output/TC01-Login.html","TC01_Login");
+
 
     /**
      * Constructor of TestBase to: Set Driver + Render all elements on All pages
@@ -46,7 +50,9 @@ public class TestBase {
     public void beforeClass(){
         log.info("Test base - before class");
         TestBase.driver.manage().window().maximize();
+        report.setInfo("Maximize browser");
         TestBase.driver.navigate().to(Config.getConfig("baseUrl"));
+        report.setInfo("Open Web Application");
     }
 
 
@@ -54,7 +60,10 @@ public class TestBase {
     public void afterClass(){
         log.info("Test base - after class");
         TestBase.driver.quit();
+
+        report.endWriteReport();
     }
+
 
 
 }
